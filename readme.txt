@@ -4,7 +4,7 @@ Tags: rest-api, site-management, backup, plugins, themes, updates
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,11 @@ Authentication is via a plugin-generated API key (Settings > Site Manager). Send
 * GET /files, /files/read, POST /files/write - Browse and edit files
 
 == Changelog ==
+
+= 1.1.0 =
+* Added auto-update support via GitHub releases.
+* Added connector version to /info endpoint.
+* Added update server URL setting in admin.
 
 = 1.0.0 =
 * Initial release.

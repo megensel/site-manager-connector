@@ -38,6 +38,24 @@ class Site_Manager_Connector_Settings_Page {
 				'success'
 			);
 		}
+
+		// Handle update URL save/clear.
+		if ( isset( $_POST['site_manager_save_update_url'] ) && check_admin_referer( 'site_manager_update_url' ) && current_user_can( 'manage_options' ) ) {
+			$new_url = isset( $_POST['site_manager_update_url_value'] ) ? esc_url_raw( wp_unslash( $_POST['site_manager_update_url_value'] ) ) : '';
+			if ( empty( $new_url ) ) {
+				delete_option( Site_Manager_Connector_Updater::OPTION_UPDATE_URL );
+			} else {
+				update_option( Site_Manager_Connector_Updater::OPTION_UPDATE_URL, $new_url );
+			}
+			// Clear cached update data so the new URL takes effect immediately.
+			delete_transient( Site_Manager_Connector_Updater::TRANSIENT_KEY );
+			add_settings_error(
+				self::OPTION_GROUP,
+				'update_url_saved',
+				__( 'Update server URL saved.', 'site-manager-connector' ),
+				'success'
+			);
+		}
 	}
 
 	/**
@@ -68,6 +86,21 @@ class Site_Manager_Connector_Settings_Page {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'REST API base', 'site-manager-connector' ); ?></th>
 					<td><code><?php echo esc_html( $rest_url ); ?></code></td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Connector Version', 'site-manager-connector' ); ?></th>
+					<td><code><?php echo esc_html( SITE_MANAGER_CONNECTOR_VERSION ); ?></code></td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Update Server URL', 'site-manager-connector' ); ?></th>
+					<td>
+						<form method="post">
+							<?php wp_nonce_field( 'site_manager_update_url' ); ?>
+							<input type="text" name="site_manager_update_url_value" value="<?php echo esc_attr( get_option( Site_Manager_Connector_Updater::OPTION_UPDATE_URL, '' ) ); ?>" class="regular-text" placeholder="<?php echo esc_attr( Site_Manager_Connector_Updater::DEFAULT_UPDATE_URL ); ?>" />
+							<input type="submit" name="site_manager_save_update_url" class="button button-secondary" value="<?php esc_attr_e( 'Save', 'site-manager-connector' ); ?>" />
+							<p class="description"><?php esc_html_e( 'Leave empty to use the default GitHub update URL.', 'site-manager-connector' ); ?></p>
+						</form>
+					</td>
 				</tr>
 			</table>
 			<p class="description">
