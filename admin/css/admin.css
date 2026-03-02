@@ -1,0 +1,12 @@
+.site-manager-settings .site-manager-api-key {
+	display: inline-block;
+	padding: 0.25em 0.5em;
+	background: #f0f0f1;
+	border-radius: 4px;
+	word-break: break-all;
+	font-size: 13px;
+}
+
+.site-manager-settings .form-table th {
+	width: 180px;
+}
